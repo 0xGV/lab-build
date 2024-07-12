@@ -10,6 +10,8 @@ variable "api_endpoint" {
 #Input variables - read from .tfvars file
 
 variable "token_id" {
+    sensitive = true
 }
 variable "token_secret" {
+    sensitive = true
 }
