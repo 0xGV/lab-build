@@ -2,7 +2,7 @@ terraform {
     required_providers {
       proxmox = {
         source = "telmate/proxmox"
-        version = "2.9.14"
+        version = "3.0.1-rc3"
       }
     }
 }
@@ -21,19 +21,32 @@ provider "proxmox" {
   pm_tls_insecure = true
 }
 
+
+#Documentation Link :
+# https://github.com/Telmate/terraform-provider-proxmox/blob/master/docs/resources/vm_qemu.md
 resource "proxmox_vm_qemu" "demo-vm" {
     name            = "demo-vm"
     target_node     = "pxe"
-    iso             = "local:iso/archlinux-2024.03.01-x86_64.iso"
     vmid            = 111       
     cores           = 2
     memory          = 2048
 
-    disk{
-
-    size             = "20G"
-    type             = "scsi"
-    storage          = "local-lvm"
+    disks{
+         ide {
+            ide2 {
+                cdrom {
+                    iso = "local:iso/archlinux-2024.03.01-x86_64.iso"
+                }
+            }
+        }
+        scsi{
+            scsi0{
+                disk{
+                    size             = "20G"
+                    storage          = "local-lvm"
+                }
+            }
+        }
     }
 }
 
